@@ -1,5 +1,3 @@
-export module task_manager; // Modulu elan edir
-
 #include <iostream>         // Giriş-çıxış üçün
 #include <queue>            // Priority queue (prioritet sırası) üçün
 #include <unordered_set>    // ID-ləri saxlamaq üçün
@@ -7,6 +5,8 @@ export module task_manager; // Modulu elan edir
 #include <string>           // Mətn tipini istifadə etmək üçün
 #include <atomic>           // Avtomatik ID yaradılması üçün
 #include <fstream>          // Fayl oxuma və yazma üçün
+
+export module task_manager; // Modulu elan edir
 
 using namespace std;
 
@@ -28,7 +28,7 @@ private:
     priority_queue<Task> taskQueue;      // Tapşırıqları prioritetlə saxlamaq üçün
     unordered_set<int> taskIds;         // Unikal ID-lərin toplusu
     unordered_map<int, string> taskDetails; // Tapşırıq haqqında əlavə məlumatlar
-    atomic<int> idCounter{1};           // Avtomatik ID yaratmaq üçün
+    atomic<int> idCounter{ 1 };           // Avtomatik ID yaratmaq üçün
     const string saveFile = "tasks.txt"; // Tapşırıqların saxlanacağı fayl
 
 public:
@@ -40,7 +40,7 @@ public:
     // Yeni tapşırıq əlavə etmək üçün funksiya
     void addTask(const string& description, int priority, const string& details) {
         int id = generateId();                  // Yeni ID yaradılır
-        taskQueue.push({id, description, priority}); // Tapşırıq növbəyə əlavə edilir
+        taskQueue.push({ id, description, priority }); // Tapşırıq növbəyə əlavə edilir
         taskIds.insert(id);                     // ID `unordered_set`-ə əlavə edilir
         taskDetails[id] = details;              // Ətraflı məlumat saxlanır
         cout << "Tapşırıq əlavə olundu: " << description << " (ID: " << id << ", Prioritet: " << priority << ")" << endl;
@@ -82,8 +82,8 @@ public:
             Task task = tempQueue.top();
             tempQueue.pop();
             cout << "- ID: " << task.id << ", Təsvir: " << task.description
-                 << ", Prioritet: " << task.priority
-                 << ", Ətraflı: " << taskDetails[task.id] << endl;
+                << ", Prioritet: " << task.priority
+                << ", Ətraflı: " << taskDetails[task.id] << endl;
         }
     }
 
@@ -97,7 +97,7 @@ public:
             tempQueue.pop();
             if (task.description.find(keyword) != string::npos || taskDetails[task.id].find(keyword) != string::npos) {
                 cout << "- ID: " << task.id << ", Təsvir: " << task.description
-                     << ", Ətraflı: " << taskDetails[task.id] << endl;
+                    << ", Ətraflı: " << taskDetails[task.id] << endl;
                 found = true;
             }
         }
@@ -154,7 +154,7 @@ public:
             int priority = stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
             string details = line.substr(pos3 + 1);
 
-            taskQueue.push({id, description, priority}); // Növbəyə tapşırıq əlavə edilir
+            taskQueue.push({ id, description, priority }); // Növbəyə tapşırıq əlavə edilir
             taskIds.insert(id);                         // ID saxlanılır
             taskDetails[id] = details;                  // Ətraflı məlumat saxlanılır
             if (id >= idCounter) idCounter = id + 1;    // ID-nin növbəti qiyməti müəyyən edilir
